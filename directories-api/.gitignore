@@ -3,6 +3,8 @@
 mvnw
 mvnw.cmd
 
+*.db
+
 ### STS ###
 .apt_generated
 .classpath
