@@ -1,14 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 /*
- * Convert bytes into largest possible unit.
- * Takes an precision argument that defaults to 2.
- * Usage:
- *   bytes | fileSize:precision
+ * Convert bytes into human readable form.
+ * Default precision is 2.
+ * In this implementation 1 KB = 1024 bytes.
  * Example:
  *   {{ 1024 |  fileSize}}
- *   formats to: 1 KB
-*/
+ */
 @Pipe({name: 'fileSize'})
 export class FileSizePipe implements PipeTransform {
 

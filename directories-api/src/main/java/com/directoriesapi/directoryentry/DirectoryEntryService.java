@@ -9,32 +9,31 @@ import java.math.BigInteger;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Service
 public class DirectoryEntryService {
 
     @Autowired
-    private DirectoryEntryRepository directoryEntryRepository;
+    private DirectoryEntryRepository directoryEntryRepository;    // CRUD repository with specific method
 
     public List<DirectoryEntry> getAllDirectoryEntries(long directoryId){
 
-        List<DirectoryEntry> list = this.directoryEntryRepository.findByDirectoryId(directoryId);
-        list.sort(DirectoryEntryComparator.getInstance());
+        List<DirectoryEntry> list = this.directoryEntryRepository.findByDirectoryId(directoryId);  // get all entries in directory
+        list.sort(DirectoryEntryComparator.getInstance());                                         // use number aware sort
         return list;
 
     }
 
-    public void addDirectoryEntriesForDirectory(Directory directory){
+    public void addDirectoryEntriesForDirectory(Directory directory){  // supporting method for DirectoryService
 
         File dir = new File(directory.getPath());
-        File[] fList = dir.listFiles();
+        File[] fList = dir.listFiles();             // get inner files and subdirectories
 
         if(fList != null){
 
             List<DirectoryEntry> list = new LinkedList<>();
 
-            Arrays.stream(fList).forEach(e -> {
+            Arrays.stream(fList).forEach(e -> {                 // populate list of entries in directory
                 DirectoryEntry entry = new DirectoryEntry();
 
                 entry.setDirectory(directory);
@@ -46,23 +45,23 @@ public class DirectoryEntryService {
                 list.add(entry);
             });
 
-            directoryEntryRepository.saveAll(list);
+            directoryEntryRepository.saveAll(list);           // save list of entries to db
 
         }
 
     }
 }
 
-final class DirectoryEntryComparator implements Comparator<DirectoryEntry>{
+final class DirectoryEntryComparator implements Comparator<DirectoryEntry>{  // special number aware comparator
 
     private static DirectoryEntryComparator instance = null;
 
-    private static final Pattern PATTERN = Pattern.compile("(\\D*)(\\d*)");
+    private static final Pattern PATTERN = Pattern.compile("(\\D*)(\\d*)"); // regex for further use
 
     private DirectoryEntryComparator(){
     }
 
-    public static DirectoryEntryComparator getInstance(){
+    public static DirectoryEntryComparator getInstance(){                  // our comparator is singleton
 
         if(instance == null){
 
@@ -79,25 +78,31 @@ final class DirectoryEntryComparator implements Comparator<DirectoryEntry>{
 
         if(o1.getType() != o2.getType()){
 
-            return o1.getType() == DirectoryEntry.Type.DIRECTORY ? -1 : 1;
+            return o1.getType() == DirectoryEntry.Type.DIRECTORY ? -1 : 1;  // directory is always lesser than file
 
         } else {
 
-            Matcher m1 = PATTERN.matcher(o1.getName());
-            Matcher m2 = PATTERN.matcher(o2.getName());
+            String o1FileName = o1.getName().replaceFirst("[.][^.]+$", "");        // get file names without extension
+            String o2FileName = o2.getName().replaceFirst("[.][^.]+$", "");
+
+            String o1ExtensionName = o1.getName().substring(o1.getName().lastIndexOf(".") + 1); // get extensions of files
+            String o2ExtensionName = o2.getName().substring(o2.getName().lastIndexOf(".") + 1);
+
+            Matcher m1 = PATTERN.matcher(o1FileName);
+            Matcher m2 = PATTERN.matcher(o2FileName);
 
             while(m1.find() && m2.find()){
 
-                int nonDigitComparison = m1.group(1).compareToIgnoreCase(m2.group(1));
+                int nonDigitComparison = m1.group(1).compareToIgnoreCase(m2.group(1));  // compare non digit part of file name ignoring case
                 if(nonDigitComparison != 0){
 
                     return nonDigitComparison;
 
                 }
 
-                if (m1.group(2).isEmpty()){
+                if (m1.group(2).isEmpty()){    // check if both names have first and second groups( for example, if not, f.txt < f1.txt )
 
-                    return m2.group(2).isEmpty() ? 0 : -1;
+                    return m2.group(2).isEmpty() ? (o1ExtensionName.compareToIgnoreCase(o2ExtensionName)) : -1;  // if both second groups are empty compare extensions
 
                 } else if (m2.group(2).isEmpty()){
 
@@ -108,7 +113,7 @@ final class DirectoryEntryComparator implements Comparator<DirectoryEntry>{
                 BigInteger n1 = new BigInteger(m1.group(2));
                 BigInteger n2 = new BigInteger(m2.group(2));
 
-                int numberComparison = n1.compareTo(n2);
+                int numberComparison = n1.compareTo(n2);  // compare digit part of file name
                 if (numberComparison != 0){
 
                     return numberComparison;
@@ -117,7 +122,7 @@ final class DirectoryEntryComparator implements Comparator<DirectoryEntry>{
 
             }
 
-            return m1.hitEnd() && m2.hitEnd() ? 0 : (m1.hitEnd() ? -1 : 1);
+            return m1.hitEnd() && m2.hitEnd() ? (o1ExtensionName.compareToIgnoreCase(o2ExtensionName)) : (m1.hitEnd() ? -1 : 1);  // in all other cases
 
         }
 

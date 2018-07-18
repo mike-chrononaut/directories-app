@@ -4,16 +4,16 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class Directory {
+public class Directory {    //Class for directory information
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private LocalDateTime timestamp;
+    private LocalDateTime timestamp;  // time of insertion to db
     private String path;
-    private long filesNumber = 0L;
-    private long filesSize = 0L;
-    private long dirsNumber = 0L;
+    private long filesNumber = 0L;    // number of files in this directory
+    private long filesSize = 0L;      // total size of all files in this directory in bytes
+    private long dirsNumber = 0L;     // number of subdirectories in this directory
 
 
     public Directory(long id, LocalDateTime timestamp, String path, long filesNumber, long filesSize, long dirsNumber) {

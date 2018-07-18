@@ -69,6 +69,8 @@
                             <workingDirectory>../directories-ui</workingDirectory>
                             <arguments>
                                 <argument>build</argument>
+                                <argument>--prod</argument>
+                                <argument>--build-optimizer</argument>
                                 <argument>--output-path</argument>
                                 <argument>../directories-api/src/main/resources/static</argument>
                             </arguments>

@@ -5,7 +5,7 @@ import { MatTable } from '@angular/material';
 import { DatePipe } from '@angular/common';
 import { FileSizePipe } from '../file-size.pipe';
 import { MatSort, MatTableDataSource } from '@angular/material';
-import {MatDialog, MatDialogConfig} from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { EntriesComponent } from '../entries/entries.component';
 
 @Component({
@@ -15,12 +15,9 @@ import { EntriesComponent } from '../entries/entries.component';
 })
 export class TableComponent implements OnInit {
 
-  //abc: Directory[] = [];
-  
-  //abc: Directory[] = [{id:1, timestamp:new Date(), path:"C:/Documents", dirsNumber:13, filesNumber:56, filesSize:45678}];
-  directories = new MatTableDataSource([]);
+  directories = new MatTableDataSource([]);  // main sortable data source for table
 
-  displayedColumns: string[] = ['timestamp', 'path', 'dirsNumber', 'filesNumber', 'filesSize', 'button'];
+  displayedColumns: string[] = ['timestamp', 'path', 'dirsNumber', 'filesNumber', 'filesSize', 'button'];  // columns to show
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatTable) table: MatTable<any>;
@@ -42,14 +39,13 @@ export class TableComponent implements OnInit {
     data.push(d);
     this.directories.data = data;
 
-    this.table.renderRows();
+    this.table.renderRows();  // redraw our table to show added directory
 
   }
 
   showDirectoryEntries(d: Directory) {
-    console.log("In showDirectoryEntries");
 
-    this.dialog.open(EntriesComponent, {
+    this.dialog.open(EntriesComponent, {  // open new dialog
       data: d
     });
 

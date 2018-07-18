@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 
 @Entity
-public class DirectoryEntry {
+public class DirectoryEntry {    // class for directory entry ( can be file or subdirectory )
 
-    public enum Type {
+    public enum Type {           // simple supporting enum
         DIRECTORY, FILE;
     }
 
@@ -18,10 +18,10 @@ public class DirectoryEntry {
     @Enumerated(EnumType.STRING)
     private Type type;
     private String name;
-    private long size = 0L;
+    private long size = 0L;     // size of entry in bytes
     @ManyToOne
     @JsonIgnore
-    private Directory directory;
+    private Directory directory;  // reference to directory this entry belongs to
 
     public DirectoryEntry(long id, Type type, String name, long size, Directory directory) {
         this.id = id;

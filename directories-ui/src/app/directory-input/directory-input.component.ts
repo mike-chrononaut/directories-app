@@ -10,11 +10,11 @@ import { MatTooltip } from '@angular/material';
 })
 export class DirectoryInputComponent implements AfterViewInit {
 
-  errorMessage: string = "Dummy error";
+  errorMessage: string = "Dummy error";  // tooltip message
 
-  @ViewChild('tooltip') tooltip:MatTooltip;
+  @ViewChild('tooltip') tooltip:MatTooltip;  // tooltip below input
 
-  @Output() addEvent: EventEmitter<Directory> = new EventEmitter<Directory>();
+  @Output() addEvent: EventEmitter<Directory> = new EventEmitter<Directory>();  // event to add new directory
 
   constructor(private dataService: DataService) { }
 
@@ -23,9 +23,10 @@ export class DirectoryInputComponent implements AfterViewInit {
     let dir: Directory = new Directory();
     dir.path = path;
     
-    this.dataService.addNewDirectory(dir).subscribe(data => {this.addEvent.emit(data);console.log(data); this.disableTooltip(); console.log(this.errorMessage)},
-                                                    error => {this.errorMessage = error.error.message; console.log(this.errorMessage);
-                                                              this.tooltip.disabled = false;this.tooltip.show()});
+    this.dataService.addNewDirectory(dir).subscribe(data =>  {this.addEvent.emit(data);this.disableTooltip()},
+                                                    error => {this.errorMessage = error.error.message;
+                                                              this.tooltip.disabled = false;
+                                                              this.tooltip.show()});
   }
 
   disableTooltip() {
@@ -34,7 +35,7 @@ export class DirectoryInputComponent implements AfterViewInit {
 
   ngAfterViewInit() {
 
-    this.disableTooltip();
+    this.disableTooltip(); // on start no tooltip message
 
   }
 

@@ -22,13 +22,13 @@ public class DirectoryController {
     @RequestMapping(method= RequestMethod.POST, value="/directories")
     public Directory addDirectory(@RequestBody Directory directory){
 
-        if(directoryService.checkDirectory(directory)){
+        if(directoryService.checkDirectory(directory)){       // check directory path for correctness
 
             return directoryService.addDirectory(directory);
 
         } else {
 
-            throw new DirectoryNotFoundException();
+            throw new DirectoryNotFoundException();          // throw 404 Error ( Cannot find this directory )
 
         }
 
