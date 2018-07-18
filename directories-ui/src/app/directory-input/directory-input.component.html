@@ -1,0 +1,12 @@
+<span style="font-weight:bold;font-size:20px;margin-right:30px">Новая директория    </span>
+<mat-form-field appearance="outline" style="width:400px">
+    <mat-label>Введите путь к директории</mat-label>
+    <input #dirpath matInput #tooltip="matTooltip"
+                             [matTooltip]="errorMessage"
+                             matTooltipPosition="below"
+                             (click)="disableTooltip()"
+                             >
+</mat-form-field>
+<button mat-stroked-button color="primary" style="margin-left:10px" (click)="addNewDirectory(dirpath.value)">Добавить в список</button>
+
+

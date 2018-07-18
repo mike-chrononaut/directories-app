@@ -1,0 +1,39 @@
+
+  <mat-table [dataSource]="directories" matSort class="mat-elevation-z8">
+  
+    <ng-container matColumnDef="timestamp">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Дата </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.timestamp | date:'dd.MM.yyyy HH:mm'}} </mat-cell>
+    </ng-container>
+  
+    <ng-container matColumnDef="path">
+      <mat-header-cell *matHeaderCellDef> Базовая директория </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.path}} </mat-cell>
+    </ng-container>
+  
+    <ng-container matColumnDef="dirsNumber">
+      <mat-header-cell *matHeaderCellDef> Директорий </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.dirsNumber}} </mat-cell>
+    </ng-container>
+  
+    <ng-container matColumnDef="filesNumber">
+      <mat-header-cell *matHeaderCellDef> Файлов </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.filesNumber}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="filesSize">
+      <mat-header-cell *matHeaderCellDef> Суммарный размер файлов </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.filesSize | fileSize}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="button">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button mat-stroked-button color="primary" (click)="showDirectoryEntries(element)"> Файлы </button>
+      </mat-cell>
+    </ng-container>
+  
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+

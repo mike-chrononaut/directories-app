@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>{{dir.path}}  {{dir.timestamp | date:'dd.MM.yyyy HH:mm'}}</h2>
+<mat-dialog-content>
+  <mat-table [dataSource]="entries" class="mat-elevation-z8">
+  
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef> Файл </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+    </ng-container>
+  
+    <ng-container matColumnDef="size">
+      <mat-header-cell *matHeaderCellDef> Размер </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.type == "FILE" ? (element.size | fileSize): 'DIR'}} </mat-cell>
+    </ng-container>
+  
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-stroked-button (click)="close()"> Закрыть </button>
+</mat-dialog-actions>
